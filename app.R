@@ -21,17 +21,9 @@ library(RColorBrewer)
 library(plotly)
 library(readr)
 
-#### Connect to Database ####
-con <- dbConnect(
-  RPostgres::Postgres(),
-  host = "reform-cjis-rds-cluster.cluster-cl8mgigamxxo.us-east-1.rds.amazonaws.com",
-  port = 5432,
-  user = "postgres",
-  password = "Reform12345!"
-)
-on.exit(dbDisconnect(con), add = TRUE)
 
-#### Read in Data ####
+####Read in Data####
+##Raw Recidiviz Data
 recidiviz_df <- 
   "data-raw" %>% 
   here("recidiviz-projections-total.csv") %>% 
@@ -71,18 +63,26 @@ recidiviz_df <-
            estimate_time_frame %>% 
            str_replace_all("ten years", "10-Year"))
 
+##States Spatial DF
 states_sf <- 
   states(cb = TRUE) %>% 
   st_transform(4326) %>% 
   clean_names() %>%
   rename("state" = "name")
 
-my_theme <- bs_theme(version = 4, bg = "#2C2C2C", fg = "#F5F5F5", primary = "#4A90E2", secondary = "#7FB3D5")
+##My Themes
+my_theme <- 
+  bs_theme(version = 4, 
+           bg = "#2C2C2C", 
+           fg = "#F5F5F5", 
+           primary = "#4A90E2", 
+           secondary = "#7FB3D5")
 
-#### UI ####
+
+####App####
+##UI
 ui <- navbarPage("Recidiviz Impact Projections Dashboard", theme = my_theme,
                  
-                 # ---- PAGE 1: Main Map ----
                  tabPanel("Main Dashboard",
                           sidebarLayout(
                             sidebarPanel(
@@ -135,13 +135,11 @@ ui <- navbarPage("Recidiviz Impact Projections Dashboard", theme = my_theme,
                                           multiple = TRUE,
                                           selectize = TRUE),
                               
-                              # Projection Time Frame selection (acts like outcome metric)
                               selectInput("custom_projection_time", "Projection Time Frame(s)",
                                           choices = unique(recidiviz_df$estimate_time_frame),
                                           multiple = TRUE,
                                           selected = unique(recidiviz_df$estimate_time_frame)),
                               
-                              # Filters
                               selectInput("custom_state", "State",
                                           choices = unique(recidiviz_df$state),
                                           multiple = TRUE),
@@ -165,10 +163,9 @@ ui <- navbarPage("Recidiviz Impact Projections Dashboard", theme = my_theme,
                  )
 )
 
-#### SERVER ####
-server <- function(input, output, session) {
+##Server
+server <- function(input, output, session){
   
-  # Dynamically update Bill dropdown based on State selection
   observeEvent(input$state, {
     bills_df <- recidiviz_df %>%
       filter(is.null(input$state) | state %in% input$state) %>%
@@ -176,18 +173,16 @@ server <- function(input, output, session) {
     updateSelectInput(session, "bill_name", choices = bills_df, selected = NULL)
   })
   
-  # Filtered dataset reactive
   filtered_df <- reactive({
     df <- recidiviz_df
-    if (!is.null(input$state) && length(input$state) > 0) df <- df %>% filter(state %in% input$state)
-    if (!is.null(input$bill_name) && length(input$bill_name) > 0) df <- df %>% filter(bill_name %in% input$bill_name)
-    if (!is.null(input$estimate_type) && length(input$estimate_type) > 0) df <- df %>% filter(estimate_type %in% input$estimate_type)
-    if (!is.null(input$impact_type) && length(input$impact_type) > 0) df <- df %>% filter(impact_type %in% input$impact_type)
-    if (!is.null(input$estimate_time_frame) && length(input$estimate_time_frame) > 0) df <- df %>% filter(estimate_time_frame %in% input$estimate_time_frame)
+    if(!is.null(input$state) && length(input$state) > 0) df <- df %>% filter(state %in% input$state)
+    if(!is.null(input$bill_name) && length(input$bill_name) > 0) df <- df %>% filter(bill_name %in% input$bill_name)
+    if(!is.null(input$estimate_type) && length(input$estimate_type) > 0) df <- df %>% filter(estimate_type %in% input$estimate_type)
+    if(!is.null(input$impact_type) && length(input$impact_type) > 0) df <- df %>% filter(impact_type %in% input$impact_type)
+    if(!is.null(input$estimate_time_frame) && length(input$estimate_time_frame) > 0) df <- df %>% filter(estimate_time_frame %in% input$estimate_time_frame)
     df
   })
   
-  # ---- MAP ----
   output$main_map <- renderLeaflet({
     df <- filtered_df()
     req(nrow(df) > 0)
@@ -205,7 +200,7 @@ server <- function(input, output, session) {
     
     leaflet(states_map) %>%
       addProviderTiles("CartoDB.Positron") %>%
-      setView(lng = -98, lat = 39, zoom = 4) %>%   # Center on the U.S.
+      setView(lng = -98, lat = 39, zoom = 4) %>%   
       addPolygons(
         fillColor = ~pal(estimate),
         weight = 1,
@@ -220,7 +215,6 @@ server <- function(input, output, session) {
                 title = input$estimate_type %>% str_replace_all("_", " ") %>% str_to_title())
   })
   
-  # ---- TABLE ----
   output$main_table <- renderDT({
     df <- 
       filtered_df() %>% 
@@ -240,78 +234,68 @@ server <- function(input, output, session) {
       df, 
       extensions = 'Buttons', 
       options = list(
-        scrollX = TRUE,         # horizontal scroll
-        scrollY = "500px",      # vertical scroll height
-        paging = FALSE,         # show all rows in scroll
-        dom = 'Bfrtip',         # buttons + filter
+        scrollX = TRUE,         
+        scrollY = "500px",      
+        paging = FALSE,         
+        dom = 'Bfrtip',         
         buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
       )
     )
   })
   
-  
-  # ---- CUSTOM VISUALIZATION ----
-  # Reactive filtered dataset for custom page
-  # Filter data
   custom_filtered <- reactive({
     df <- recidiviz_df
-    if (!is.null(input$custom_state) && length(input$custom_state) > 0)
+    if(!is.null(input$custom_state) && length(input$custom_state) > 0)
       df <- df %>% filter(state %in% input$custom_state)
-    if (!is.null(input$custom_bill_name) && length(input$custom_bill_name) > 0)
+    if(!is.null(input$custom_bill_name) && length(input$custom_bill_name) > 0)
       df <- df %>% filter(bill_name %in% input$custom_bill_name)
-    if (!is.null(input$custom_impact_type) && length(input$custom_impact_type) > 0)
+    if(!is.null(input$custom_impact_type) && length(input$custom_impact_type) > 0)
       df <- df %>% filter(impact_type %in% input$custom_impact_type)
-    if (!is.null(input$custom_projection_time) && length(input$custom_projection_time) > 0)
+    if(!is.null(input$custom_projection_time) && length(input$custom_projection_time) > 0)
       df <- df %>% filter(estimate_time_frame %in% input$custom_projection_time)
     df
   })
   
-  # No aggregation across projection time frames
   custom_agg <- eventReactive(input$generate_plot, {
     df <- custom_filtered()
     df
   })
   
-  # Plot
   output$custom_plot <- renderPlot({
     req(input$generate_plot)
     
     df <- custom_agg()
     
-    if (nrow(df) == 0) {
+    if(nrow(df) == 0){
       plot.new()
       text(0.5, 0.5, "No data to display. Adjust filters and click 'Generate Plot'.", cex = 1.5)
       return()
     }
     
-    # Ensure estimate is numeric for plotting
     df <- df %>% mutate(estimate = as.numeric(estimate))
     
-    # Base ggplot
     p <- ggplot(df, aes(x = .data[[input$custom_group]], y = estimate))
     
-    if (input$custom_chart_type == "bar") {
+    if(input$custom_chart_type == "bar"){
       p <- p + geom_col(aes(fill = estimate_time_frame), position = position_dodge())
-    } else if (input$custom_chart_type == "line") {
+    }else if(input$custom_chart_type == "line"){
       p <- p + geom_line(aes(group = estimate_time_frame, color = estimate_time_frame), size = 1.2) +
         geom_point(aes(color = estimate_time_frame))
-    } else if (input$custom_chart_type == "scatter") {
+    }else if(input$custom_chart_type == "scatter"){
       p <- p + geom_point(aes(color = estimate_time_frame), size = 3)
-    } else if (input$custom_chart_type == "boxplot") {
+    }else if(input$custom_chart_type == "boxplot"){
       p <- p + geom_boxplot(aes(fill = estimate_time_frame))
     }
     
-    # Facets
-    if (length(input$custom_facet) == 1) {
+    if(length(input$custom_facet) == 1){
       p <- p + facet_wrap(vars(.data[[input$custom_facet[1]]]))
-    } else if (length(input$custom_facet) == 2) {
+    }else if(length(input$custom_facet) == 2){
       p <- p + facet_grid(
         rows = vars(.data[[input$custom_facet[1]]]),
         cols = vars(.data[[input$custom_facet[2]]])
       )
     }
     
-    # Final theme, labels, and y-axis formatting
     p + theme_minimal() +
       labs(fill = "Projection Time Frame",
            color = "Projection Time Frame",
@@ -320,8 +304,6 @@ server <- function(input, output, session) {
       scale_y_continuous(labels = scales::comma)
   })
   
-  
-  # Table
   output$custom_table <- renderDT({
     req(input$generate_plot)
     datatable(
@@ -339,31 +321,30 @@ server <- function(input, output, session) {
                       str_replace_all("Ci$", "CI")),
       extensions = 'Buttons',
       options = list(
-        scrollX = TRUE,        # horizontal scroll for wide tables
-        scrollY = "400px",     # vertical scroll height
-        paging = FALSE,        # disable pagination
-        dom = 'Bfrtip',        # show buttons + filtering
+        scrollX = TRUE,        
+        scrollY = "400px",     
+        paging = FALSE,        
+        dom = 'Bfrtip',        
         buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
       )
     )
   })
-  
-  
-  # Downloads
+
   output$download_custom_plot <- downloadHandler(
     filename = function() paste0("custom_plot_", Sys.Date(), ".png"),
-    content = function(file) {
+    content = function(file){
       ggsave(file, plot = custom_plot(), width = 10, height = 7)
     }
   )
   
   output$download_custom_data <- downloadHandler(
     filename = function() paste0("custom_data_", Sys.Date(), ".csv"),
-    content = function(file) {
+    content = function(file){
       write_csv(custom_agg(), file)
     }
   )
 }
 
-#### Run App ####
+
+####Run App####
 shinyApp(ui, server)
