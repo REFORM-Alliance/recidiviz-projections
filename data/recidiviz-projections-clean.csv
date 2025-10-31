@@ -1,0 +1,101 @@
+state,bill_name,year_passed,impact_type,estimate_time_frame,modelability_score,estimate_type,estimate,lower_ci,upper_ci
+Louisiana,HB 77,2020,Modified supervision conditions,September 2025,4,life_years,66679,33340,100019
+Louisiana,HB 77,2020,Modified supervision conditions,September 2025,4,people_impacted,21461,10730,32191
+Louisiana,HB 77,2020,Modified supervision conditions,ten years,4,life_years,131172,65586,196758
+Louisiana,HB 77,2020,Modified supervision conditions,ten years,4,people_impacted,42218,21109,63327
+Louisiana,HB 643,2020,Reduced supervision time,September 2025,3,life_years,2402,,
+Louisiana,HB 643,2020,Reduced supervision time,September 2025,3,people_impacted,1153,,
+Louisiana,HB 643,2020,Reduced supervision time,ten years,3,life_years,3627,,
+Louisiana,HB 643,2020,Reduced supervision time,ten years,3,people_impacted,1480,,
+California,SB 118,2020,Reduced supervision time,September 2025,2,life_years,14990,2857,27390
+California,SB 118,2020,Reduced supervision time,September 2025,2,people_impacted,88333,,
+California,SB 118,2020,Reduced supervision time,ten years,2,life_years,34593,6593,63209
+California,SB 118,2020,Reduced supervision time,ten years,2,people_impacted,203848,,
+California,AB 1950,2020,Reduced supervision time,September 2025,4,life_years,239161,183602,283143
+California,AB 1950,2020,Reduced supervision time,September 2025,4,people_impacted,358792,275441,424774
+California,AB 1950,2020,Reduced supervision time,ten years,4,life_years,486429,373427,575884
+California,AB 1950,2020,Reduced supervision time,ten years,4,people_impacted,729746,560219,863947
+California,AB 3234,2020,Reduced supervision time,September 2025,2,life_years,368263,334374,402152
+California,AB 3234,2020,Reduced supervision time,September 2025,2,people_impacted,204093,185311,222875
+California,AB 3234,2020,Reduced supervision time,ten years,2,life_years,926476,841217,1011735
+California,AB 3234,2020,Reduced supervision time,ten years,2,people_impacted,513457,466206,560708
+California,AB 3234,2020,Reduced incarceration time,September 2025,2,life_years,,,
+California,AB 3234,2020,Reduced incarceration time,September 2025,2,people_impacted,3102,,
+California,AB 3234,2020,Reduced incarceration time,ten years,2,life_years,,,
+California,AB 3234,2020,Reduced incarceration time,ten years,2,people_impacted,4653,,
+Michigan,SB 1048 + 1050,2020,Reduced supervision time,September 2025,1,life_years,134213,,
+Michigan,SB 1048 + 1050,2020,Reduced supervision time,September 2025,1,people_impacted,88993,,
+Michigan,SB 1048 + 1050,2020,Reduced supervision time,ten years,1,life_years,287600,,
+Michigan,SB 1048 + 1050,2020,Reduced supervision time,ten years,1,people_impacted,190700,,
+Michigan,SB 1051,2020,Modified supervision conditions,September 2025,3,life_years,38415,,
+Michigan,SB 1051,2020,Modified supervision conditions,September 2025,3,people_impacted,26073,,
+Michigan,SB 1051,2020,Modified supervision conditions,ten years,3,life_years,86977,,
+Michigan,SB 1051,2020,Modified supervision conditions,ten years,3,people_impacted,59033,,
+New Jersey,S2519,2020,Reduced incarceration time,September 2025,3,life_years,6600,,
+New Jersey,S2519,2020,Reduced incarceration time,September 2025,3,people_impacted,6600,,
+New Jersey,S2519,2020,Reduced incarceration time,ten years,3,life_years,6600,,
+New Jersey,S2519,2020,Reduced incarceration time,ten years,3,people_impacted,6600,,
+New Jersey,A2370,2020,Reduced incarceration time,September 2025,1,life_years,10,,
+New Jersey,A2370,2020,Reduced incarceration time,September 2025,1,people_impacted,10,,
+New Jersey,A2370,2020,Reduced incarceration time,ten years,1,life_years,42,21,63
+New Jersey,A2370,2020,Reduced incarceration time,ten years,1,people_impacted,42,21,63
+New Jersey,"A4369
+(AG Directive)",2021,Reduced incarceration time,September 2025,4,life_years,26456,,
+New Jersey,"A4369
+(AG Directive)",2021,Reduced incarceration time,September 2025,4,people_impacted,7511,,
+New Jersey,"A4369
+(AG Directive)",2021,Reduced incarceration time,ten years,4,life_years,60630,,
+New Jersey,"A4369
+(AG Directive)",2021,Reduced incarceration time,ten years,4,people_impacted,17212,,
+Georgia,SB 105,2021,Reduced incarceration time,September 2025,2,life_years,26718,8906,44530
+Georgia,SB 105,2021,Reduced incarceration time,September 2025,2,people_impacted,15332,5111,25553
+Georgia,SB 105,2021,Reduced incarceration time,ten years,2,life_years,62682,21976,103426
+Georgia,SB 105,2021,Reduced incarceration time,ten years,2,people_impacted,35379,11793,58966
+Virginia,HB 2038,2021,Reduced supervision time,September 2025,1,life_years,78960,,
+Virginia,HB 2038,2021,Reduced supervision time,September 2025,1,people_impacted,38328,,
+Virginia,HB 2038,2021,Reduced supervision time,ten years,1,life_years,197400,,
+Virginia,HB 2038,2021,Reduced supervision time,ten years,1,people_impacted,95822,,
+Mississippi,SB 2795,2021,,,0,life_years,,,
+Mississippi,SB 2795,2021,,,0,people_impacted,,,
+New York,S01144A,2021,Reduced supervision time,September 2025,3,life_years,51948,,
+New York,S01144A,2021,Reduced supervision time,September 2025,3,people_impacted,59897,,
+New York,S01144A,2021,Reduced supervision time,ten years,3,life_years,148429,,
+New York,S01144A,2021,Reduced supervision time,ten years,3,people_impacted,171135,,
+Florida,SB 752,2022,Reduced supervision time,September 2025,3,life_years,30367,0,
+Florida,SB 752,2022,Reduced supervision time,September 2025,3,people_impacted,88175,0,
+Florida,SB 752,2022,Reduced supervision time,ten years,3,life_years,95896,0,
+Florida,SB 752,2022,Reduced supervision time,ten years,3,people_impacted,278448,0,
+Florida,SB 752,2022,Modified supervision conditions,September 2025,3,life_years,45550,22775,68326
+Florida,SB 752,2022,Modified supervision conditions,September 2025,3,people_impacted,22044,11022,33066
+Florida,SB 752,2022,Modified supervision conditions,ten years,3,life_years,143844,71922,215765
+Florida,SB 752,2022,Modified supervision conditions,ten years,3,people_impacted,69612,34806,104418
+Pennsylvania,SB 904,2022,Modified supervision conditions,September 2025,4,life_years,182502,91251,273754
+Pennsylvania,SB 904,2022,Modified supervision conditions,September 2025,4,people_impacted,98435,49217,147652
+Pennsylvania,SB 904,2022,Modified supervision conditions,ten years,4,life_years,470975,235488,706463
+Pennsylvania,SB 904,2022,Modified supervision conditions,ten years,4,people_impacted,254025,127013,381058
+Pennsylvania,SB 905,2022,Modified supervision conditions,September 2025,4,life_years,391272,,
+Pennsylvania,SB 905,2022,Modified supervision conditions,September 2025,4,people_impacted,190512,,
+Pennsylvania,SB 905,2022,Modified supervision conditions,ten years,4,life_years,1009740,,
+Pennsylvania,SB 905,2022,Modified supervision conditions,ten years,4,people_impacted,491640,,
+Illinois,SB 423,2023,Modified supervision conditions,September 2025,2,life_years,30220,15110,45329
+Illinois,SB 423,2023,Modified supervision conditions,September 2025,2,people_impacted,24525,12262,36787
+Illinois,SB 423,2023,Modified supervision conditions,ten years,2,life_years,99033,49516,148547
+Illinois,SB 423,2023,Modified supervision conditions,ten years,2,people_impacted,71697,35848,107545
+Illinois,SB 423,2023,Reduced supervision time,September 2025,2,life_years,730,487,973
+Illinois,SB 423,2023,Reduced supervision time,September 2025,2,people_impacted,2960,1973,3946
+Illinois,SB 423,2023,Reduced supervision time,ten years,2,life_years,2652,1768,3536
+Illinois,SB 423,2023,Reduced supervision time,ten years,2,people_impacted,10754,7169,14339
+Pennsylvania,SB 838,2023,Reduced supervision time,September 2025,3,life_years,6660,5550,7770
+Pennsylvania,SB 838,2023,Reduced supervision time,September 2025,3,people_impacted,6987,5820,8152
+Pennsylvania,SB 838,2023,Reduced supervision time,ten years,3,life_years,145336,121113,169559
+Pennsylvania,SB 838,2023,Reduced supervision time,ten years,3,people_impacted,152416,127013,177819
+Pennsylvania,SB 838,2023,Reduced incarceration time,September 2025,3,life_years,16,,
+Pennsylvania,SB 838,2023,Reduced incarceration time,September 2025,3,people_impacted,188,,
+Pennsylvania,SB 838,2023,Reduced incarceration time,ten years,3,life_years,343,,
+Pennsylvania,SB 838,2023,Reduced incarceration time,ten years,3,people_impacted,4110,,
+Maryland,SB 432,2025,Record expungement,ten years,3,life_years,,,
+Maryland,SB 432,2025,Record expungement,ten years,3,people_impacted,179750,177285,181855
+Virginia,SB 936 / HB 2252,2025,Reduced supervision time,ten years,3,life_years,20387,,
+Virginia,SB 936 / HB 2252,2025,Reduced supervision time,ten years,3,people_impacted,106114,,
+Virginia,HB 1589,2025,,,0,life_years,,,
+Virginia,HB 1589,2025,,,0,people_impacted,,,
