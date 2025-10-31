@@ -14,19 +14,6 @@ library(ggrepel)
 library(ggbump)
 
 
-####Connect to Database####
-##Database Connection
-con <- dbConnect(
-  RPostgres::Postgres(),
-  host = "reform-cjis-rds-cluster.cluster-cl8mgigamxxo.us-east-1.rds.amazonaws.com",
-  port = 5432,
-  user = "postgres",
-  password = "Reform12345!"
-)
-
-on.exit(dbDisconnect(con), add = TRUE)
-
-
 ####Read in Data####
 ##Raw Recidiviz Projections
 recidiviz_df <- 
