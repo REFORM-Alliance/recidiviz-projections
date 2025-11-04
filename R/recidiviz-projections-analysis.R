@@ -84,7 +84,7 @@ state_viz_by_estimate_time <-
   ) +
   theme_minimal()
 
-ggsave(here("plots", "state_viz_by_estimate_time.png"), plot = last_plot(), width = 8, height = 6, dpi = 300)
+ggsave(here("plots", "state_viz_by_estimate_time.png"), plot = state_viz_by_estimate_time, width = 8, height = 6, dpi = 300)
 
 ##Sankey Diagram
 sankey_plot <- 

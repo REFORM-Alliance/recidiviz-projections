@@ -71,13 +71,30 @@ states_sf <-
   rename("state" = "name")
 
 ##My Themes
-my_theme <- 
-  bs_theme(version = 4, 
-           bg = "#2C2C2C", 
-           fg = "#F5F5F5", 
-           primary = "#4A90E2", 
-           secondary = "#7FB3D5")
+# my_theme <- 
+#   bs_theme(version = 4, 
+#            bg = "#2C2C2C", 
+#            fg = "#F5F5F5", 
+#            primary = "#4A90E2", 
+#            secondary = "#7FB3D5")
+my_theme <- bs_theme(
+  version = 4,
+  bg = "#FDF6E3",          # Soft cream background
+  fg = "#2C2C2C",          # Dark text for readability
+  primary = "#FF6F61",     # Vibrant coral for buttons, highlights
+  secondary = "#009E73",   # Deep purple for secondary accents
+  info = "#4A90E2",        # Blue for info highlights
+  success = "#2CA02C",     # Green for success states
+  warning = "#F0E442",     # Yellow for warnings
+  danger = "#D55E00",      # Orange-red for danger
+  base_font = font_google("Roboto")
+)
 
+cb_palette <- c(
+  "#E69F00", "#56B4E9", "#009E73",
+  "#F0E442", "#0072B2", "#D55E00",
+  "#CC79A7"
+)
 
 ####App####
 ##UI
@@ -89,7 +106,7 @@ ui <- navbarPage("Recidiviz Impact Projections Dashboard", theme = my_theme,
                               width = 2,
                               selectInput("estimate_time_frame", "Projection Timeframe", 
                                           choices = unique(recidiviz_df$estimate_time_frame), 
-                                          selected = "September 2025", multiple = FALSE),
+                                          selected = "September 2025", multiple = TRUE),
                               selectInput("impact_type", "Reform Type",
                                           choices = unique(recidiviz_df$impact_type), 
                                           selected = NULL, multiple = TRUE),
@@ -104,7 +121,8 @@ ui <- navbarPage("Recidiviz Impact Projections Dashboard", theme = my_theme,
                             mainPanel(
                               width = 10,
                               fluidRow(
-                                box(width = 12, leafletOutput("main_map", height = 600))
+                                # box(width = 12, leafletOutput("main_map", height = 600))
+                                box(width = 12, plotlyOutput("main_bar", height = 600))
                               ),
                               fluidRow(
                                 box(width = 12, DTOutput("main_table"))
@@ -214,6 +232,46 @@ server <- function(input, output, session){
       addLegend(pal = pal, values = ~estimate, position = "bottomright",
                 title = input$estimate_type %>% str_replace_all("_", " ") %>% str_to_title())
   })
+  
+  output$main_bar <- renderPlotly({
+    df <- filtered_df()
+    req(nrow(df) > 0)
+    
+    # Aggregate the data by state and projection timeframe
+    bar_df <- df %>%
+      group_by(state, estimate_time_frame, estimate_type) %>%
+      summarise(estimate = sum(estimate, na.rm = TRUE), .groups = "drop") %>%
+      filter(estimate_type %in% input$estimate_type)
+    
+    # Create the ggplot bar chart
+    p <- ggplot(bar_df, aes(
+      x = reorder(state, estimate),
+      y = estimate,
+      fill = estimate_time_frame,
+      text = paste0(
+        "<b>State:</b> ", state,
+        "<br><b>Projection:</b> ", estimate_time_frame,
+        "<br><b>Estimate:</b> ", scales::comma(estimate)
+      ))) +
+      geom_col(position = position_dodge(width = 0.9)) +
+      coord_flip() +
+      scale_fill_manual(values = cb_palette) +
+      theme_minimal(base_size = 14) +
+      theme(
+        axis.title.y = element_text(margin = margin(r = 15))  # 15 pts space on right
+      ) +
+      labs(
+        x = "State",
+        y = "Estimate",
+        fill = "Projection Time Frame"
+      ) +
+      scale_y_continuous(labels = scales::comma)
+    
+    # Make it interactive
+    ggplotly(p, tooltip = "text") %>%
+      layout(legend = list(title = list(text = "Projection Time Frame")))
+  })
+  
   
   output$main_table <- renderDT({
     df <- 
