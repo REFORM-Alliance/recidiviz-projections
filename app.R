@@ -237,28 +237,49 @@ server <- function(input, output, session){
     df <- filtered_df()
     req(nrow(df) > 0)
     
-    # Aggregate the data by state and projection timeframe
-    bar_df <- df %>%
+    bar_df <- 
+      df %>%
+      mutate(lower_ci = 
+               ifelse(is.na(lower_ci) == TRUE, 0, lower_ci),
+             upper_ci = 
+               ifelse(is.na(upper_ci) == TRUE, estimate * 2, upper_ci)) %>% 
       group_by(state, estimate_time_frame, estimate_type) %>%
-      summarise(estimate = sum(estimate, na.rm = TRUE), .groups = "drop") %>%
+      mutate(se = (upper_ci - lower_ci) / (2 * 1.96)) %>%
+      group_by(state, estimate_time_frame, estimate_type) %>%
+      dplyr::summarize(
+        sum_mean = 
+          estimate %>% 
+          sum(na.rm = TRUE),
+        sum_se = sqrt(sum(se^2)),
+        lower_sum_ci = sum_mean - 1.96 * sum_se,
+        upper_sum_ci = sum_mean + 1.96 * sum_se, 
+        estimate = 
+          estimate %>% 
+          sum(na.rm = TRUE)
+      ) %>% 
       filter(estimate_type %in% input$estimate_type)
-    
-    # Create the ggplot bar chart
-    p <- ggplot(bar_df, aes(
-      x = reorder(state, estimate),
-      y = estimate,
-      fill = estimate_time_frame,
-      text = paste0(
-        "<b>State:</b> ", state,
-        "<br><b>Projection:</b> ", estimate_time_frame,
-        "<br><b>Estimate:</b> ", scales::comma(estimate)
-      ))) +
+  
+    p <- 
+      bar_df %>% 
+      ggplot(
+        aes(x = reorder(state, estimate),
+            y = estimate,
+            fill = estimate_time_frame,
+            text = paste0(
+                      "<b>State:</b> ", state,
+                      "<br><b>Projection:</b> ", estimate_time_frame,
+                      "<br><b>Estimate:</b> ", scales::comma(estimate)
+                      )
+            )
+      ) +
       geom_col(position = position_dodge(width = 0.9)) +
+      # geom_errorbar(aes(ymin = lower_sum_ci, ymax = upper_sum_ci),
+      #               position = position_dodge(0.9), width = 0.2, lineend = "butt") +
       coord_flip() +
       scale_fill_manual(values = cb_palette) +
       theme_minimal(base_size = 14) +
       theme(
-        axis.title.y = element_text(margin = margin(r = 15))  # 15 pts space on right
+        axis.title.y = element_text(margin = margin(r = 15))
       ) +
       labs(
         x = "State",
@@ -267,7 +288,6 @@ server <- function(input, output, session){
       ) +
       scale_y_continuous(labels = scales::comma)
     
-    # Make it interactive
     ggplotly(p, tooltip = "text") %>%
       layout(legend = list(title = list(text = "Projection Time Frame")))
   })
