@@ -2,7 +2,7 @@
 
 An R Shiny dashboard and the data behind it: projections that Recidiviz, an organization that models criminal justice policy, produced for REFORM Alliance. The projections estimate how many people a set of recent state probation and supervision laws affect. REFORM Alliance uses them to understand its pathways to getting 1,000,000 people off probation.
 
-**Live app:** not recorded in this repo yet. Add the address from the app's card in [Posit Connect Cloud](https://connect.posit.cloud) here.
+**Live app:** <https://bfs6-recidiviz-projections.share.connect.posit.cloud/>
 
 ## What the data is
 
@@ -85,7 +85,7 @@ The first start downloads US state boundaries from the Census Bureau, so it need
 
 ## Publish
 
-REFORM hosts its Shiny dashboards on [Posit Connect Cloud](https://connect.posit.cloud), and this repo is set up for it (it has a `manifest.json`). Connect Cloud copies the code from GitHub and builds the app itself, so publishing an update means getting the change onto the GitHub branch it follows (normally `main`; **Settings > Source** in Connect Cloud shows which). Nothing is uploaded from your computer. Addresses have the form `https://<account>-<custom name>.share.connect.posit.cloud`, and REFORM's other dashboards use the account name `bfs6`.
+This dashboard is hosted on [Posit Connect Cloud](https://connect.posit.cloud). The live app is at <https://bfs6-recidiviz-projections.share.connect.posit.cloud/>. Connect Cloud copies the code from GitHub and builds the app itself, so publishing an update means getting the change onto the GitHub branch it follows (normally `main`; **Settings > Source** in Connect Cloud shows which). Nothing is uploaded from your computer. Addresses have the form `https://<account>-<custom name>.share.connect.posit.cloud`. This one uses the account name `bfs6`, the same as REFORM's other dashboards.
 
 ### Publish an update
 
@@ -98,12 +98,12 @@ REFORM hosts its Shiny dashboards on [Posit Connect Cloud](https://connect.posit
 ### Publish for the first time, or re-create the app
 
 1. Run `rsconnect::writeManifest()` in the R console. Commit and push `app.R`, `manifest.json` and `data-raw/`.
-2. Sign in to Connect Cloud with the account that owns REFORM's dashboards.
+2. Sign in to [Connect Cloud](https://connect.posit.cloud) with the account named `bfs6`, which owns the `share.connect.posit.cloud` addresses.
 3. Click **Publish** at the top of your Home page. The first time, Connect Cloud asks you to install its GitHub App; give it access to this repository. A repo owned by the REFORM-Alliance organization may need an organization owner to approve the app.
 4. Choose **Shiny**, then select this repository.
 5. Confirm the **Branch** is `main` and the **Primary file** is `app.R`. Leave **Automatically publish on push** on.
 6. Click **Publish** and watch the build log.
-7. Open the app's **Settings > URL** and choose a custom name. The address becomes `https://<account>-<custom name>.share.connect.posit.cloud`. Write it at the top of this README.
+7. Open the app's **Settings > URL** and set the custom name to `recidiviz-projections`. The address becomes `https://bfs6-recidiviz-projections.share.connect.posit.cloud`.
 8. Open the address in a private browser window to check that someone who is not signed in to Connect Cloud can use it.
 
 ### If something goes wrong
